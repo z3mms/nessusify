@@ -36,6 +36,7 @@ Options 't':
 		4 -     missing patches (formatted for XLS)
 		5 -		enumerate password policies
 		6 - 	get outdated software list
+		7 -		CIS benchmark (formatted for XLS)
 
 Options:
 
@@ -77,6 +78,7 @@ sub nessusify {
 	   	elsif ($type == 4) { missingOsPatchesFormatted(); }
 		elsif ($type == 5) { passwordPolicy(); }
 		elsif ($type == 6) { getOutdatedSoftware(); }
+		elsif ($type == 7) { cisBenchmark(); }
        else { issues(); }
        close (FILE);
 }
@@ -464,6 +466,22 @@ sub listOutdatedSoftware {
 	system(abs_path($0) .' -f master.nessus | grep "Multiple Vulnerabilities" | grep "' . $software . '" | cut -f1 | uniq');
 	print "\n";
 	
+}
+
+sub cisBenchmark {
+	
+	while (<FILE>) {
+		
+		if  (/<cm:compliance-check-name>(.*)<\/cm:compliance-check-name>/) {
+			my $string = $1 . "\t";
+			$string =~ s/&apos;/'/ig;
+			print $string;
+		}
+		
+		if (/<description>\&quot\;(.*)\&quot\; : \[(.*)\]/) {
+			print $2 . "\n";
+		}
+	}
 }
 
 
