@@ -478,8 +478,8 @@ sub cisBenchmark {
 			print $string;
 		}
 		
-		if (/<description>\&quot\;(.*)\&quot\; : \[(.*)\]/) {
-			print $2 . "\n";
+		if (/<cm:compliance-result>(.*)<\/cm:compliance-result>/) {
+			print $1 . "\n";
 		}
 	}
 }
